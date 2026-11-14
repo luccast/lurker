@@ -49,7 +49,7 @@
     let target = null;
     let hideT = null;
 
-    const hide = () => { btn.classList.remove("lurker-show"); target = null; };
+    const hide = () => { btn.classList.remove("lurker-show"); target = null; rect = null; };
     const hideSoon = () => { clearTimeout(hideT); hideT = setTimeout(hide, 120); };
 
     btn.addEventListener("click", (e) => {
@@ -64,19 +64,34 @@
       if (target) open(target.href, false);
     }, true);
 
+    // Rect of the thumbnail the button belongs to. YouTube's hover preview player
+    // covers the thumbnail with an element outside the link, so we keep the button
+    // while the pointer stays inside this rect, regardless of what's under it.
+    let rect = null;
+    const inside = (x, y) => rect && x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+
     document.addEventListener("mouseover", (e) => {
       if (btn.contains(e.target)) { clearTimeout(hideT); return; }
       const a = videoLink(e.target);
       const thumb = a && a.querySelector("img, yt-image, yt-thumbnail-view-model");
-      if (!thumb) return hideSoon();
-      const r = a.getBoundingClientRect();
-      if (r.width < 100 || r.height < 50) return hideSoon();
+      const r = thumb && a.getBoundingClientRect();
+      if (!r || r.width < 100 || r.height < 50) {
+        if (inside(e.clientX, e.clientY)) { clearTimeout(hideT); return; }
+        return hideSoon();
+      }
       clearTimeout(hideT);
-      target = a;
+      target = { href: a.href };
+      rect = r;
       btn.style.top = `${r.top + 8}px`;
       btn.style.left = `${r.left + 8}px`;
       btn.classList.add("lurker-show");
     }, true);
+
+    // The preview player doesn't fire new mouseovers as you move across it, so
+    // also watch pointer movement to hide once you leave the thumbnail.
+    document.addEventListener("mousemove", (e) => {
+      if (target && !inside(e.clientX, e.clientY) && !btn.contains(e.target)) hideSoon();
+    }, { passive: true, capture: true });
     window.addEventListener("scroll", hide, { passive: true, capture: true });
 
     const mount = () => document.body ? document.body.append(btn) : requestAnimationFrame(mount);
