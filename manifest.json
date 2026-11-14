@@ -1,0 +1,39 @@
+{
+  "manifest_version": 2,
+  "name": "Lurker",
+  "version": "0.1.0",
+  "description": "Watch YouTube videos without them touching your account, history, or recommendations.",
+  "browser_specific_settings": {
+    "gecko": { "id": "lurker@luccast", "strict_min_version": "115.0",
+      "data_collection_permissions": { "required": ["none"] }
+    }
+  },
+  "icons": { "48": "icons/lurker.svg", "96": "icons/lurker.svg" },
+  "permissions": [
+    "contextualIdentities",
+    "cookies",
+    "browsingData",
+    "contextMenus",
+    "tabs",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "*://*.youtube.com/*",
+    "*://youtu.be/*",
+    "*://*.google.com/*"
+  ],
+  "background": { "scripts": ["shared.js", "background.js"], "persistent": true },
+  "browser_action": {
+    "default_title": "Lurker",
+    "default_popup": "popup.html",
+    "default_icon": "icons/lurker.svg"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/*", "*://m.youtube.com/*"],
+      "js": ["shared.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_start"
+    }
+  ]
+}

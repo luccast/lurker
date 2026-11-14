@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icons/lurker.svg" width="22" height="22" alt="">
+    <h1>Lurker</h1>
+  </header>
+
+  <label class="row toggle">
+    <span>
+      <strong>Untracked mode</strong>
+      <small>Every video you click opens signed-out</small>
+    </span>
+    <input type="checkbox" id="mode">
+    <i></i>
+  </label>
+
+  <p class="hint">Or hover a thumbnail and click the eye icon, Alt+click any video, or right-click a video link and choose “Watch untracked”.</p>
+
+  <section>
+    <div class="section-head">
+      <h2>Watched untracked</h2>
+      <button id="clear-history" class="link">Clear</button>
+    </div>
+    <ul id="history"></ul>
+    <p id="empty" class="hint">Nothing yet.</p>
+  </section>
+
+  <footer>
+    <button id="wipe">Wipe untracked cookies now</button>
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>
