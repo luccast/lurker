@@ -1,5 +1,7 @@
 # Lurker
 
+![Lurker: click the eye icon on a YouTube thumbnail to watch untracked](docs/thumbnail.png)
+
 Firefox extension. Watch YouTube videos without them touching your account, watch history, or recommendations.
 
 Untracked videos open in a signed-out Firefox container tab. No account means nothing for YouTube to learn from. When the last untracked tab closes, its cookies and site data are wiped (the cookie-consent choice is kept so the consent popup doesn't reappear).
